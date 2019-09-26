@@ -1,0 +1,11 @@
+{"AppConfig": [{	"Id":"1001",
+			"Name":"Client",
+			"Source":"C:\\Users\\JM\\Projects\\VirtualEnvironment\\Projects\\SampleApp\\train\\dist\\training\\Source\\",
+			"Output":"C:\\Users\\JM\\Projects\\VirtualEnvironment\\Projects\\SampleApp\\train\\dist\\training\\Output\\",
+			"TrainedModel":"C:\\Users\\JM\\Projects\\VirtualEnvironment\\Projects\\SampleApp\\train\\dist\\training\\TrainedModel\\", 
+			"ExecutionLog":"C:\\Users\\JM\\Projects\\VirtualEnvironment\\Projects\\SampleApp\\train\\dist\\training\\Log\\",
+			"ExecutionLogFileName":"ExecutionLog.txt",
+			"FeedActiveSheet":"Final Sheet",
+			"FeedSkipRows":1, 
+			"Archive":"C:\\Users\\JM\\Projects\\VirtualEnvironment\\Projects\\SampleApp\\train\\dist\\training\\Archive\\"}
+	       ]}

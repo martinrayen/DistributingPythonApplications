@@ -1,0 +1,47 @@
+Launch cmd prompt in admin mode.
+===============================================================================================================================================
+Modules to be installed in virtual environment
+===============================================================================================================================================
+#====== To Run Training.py ====================================================================================================================
+pip install numpy    #Successfully installed numpy-1.17.2
+pip install pandas   #Successfully installed pandas-0.25.1 python-dateutil-2.8.0 pytz-2019.2 six-1.12.0
+pip install wxpython #Successfully installed pillow-6.1.0 wxpython-4.0.6 
+pip install sklearn  #Successfully installed joblib-0.13.2 scikit-learn-0.21.3 scipy-1.3.1 sklearn-0.0
+pip install seaborn    #Successfully installed seaborn-0.9.0
+pip install matplotlib #Successfully installed cycler-0.10.0 kiwisolver-1.1.0 matplotlib-3.1.1 pyparsing-2.4.2
+pip install xlrd
+pip install tornado
+pip install pywin32
+python Scripts/pywin32_postinstall.py -install  # Need admin privileges to register COM objects.
+pip install pypiwin32
+pip install cython
+#=============================================================================================================================================
+Modified "C:\Users\JM\DevEnv\Projects\VirtualEnvironment\Projects\VR\training\
+            Lib\site-packages\PyInstaller\hooks\hook-sklearn.metrics.cluster.py" 
+file to include the below code :
+Reference : https://stackoverflow.com/questions/49559770/how-do-you-resolve-hidden-imports-not-found-warnings-in-pyinstaller-for-scipy
+#-----------------------------------------------------------------------------
+# Copyright (c) 2014-2019, PyInstaller Development Team.
+#
+# Distributed under the terms of the GNU General Public License with exception
+# for distributing bootloader.
+#
+# The full license is in the file COPYING.txt, distributed with this software.
+#-----------------------------------------------------------------------------
+from PyInstaller.utils.hooks import collect_data_files
+
+# Tested on Windows 7 64bit with scikit-learn 0.17 and Python 2.7
+hiddenimports = ['sklearn.utils.sparsetools._graph_validation',
+                 'sklearn.utils.sparsetools._graph_tools',
+                 'sklearn.utils.lgamma',
+                 'sklearn.utils.weight_vector']
+
+datas = collect_data_files('sklearn')
+#==============================================================================================================================================
+Create a new file "C:\Users\JM\DevEnv\Projects\VirtualEnvironment\Projects\VR\training\
+                      Lib\site-packages\PyInstaller\hooks\hook-sklearn.py"
+to include the below code :
+
+from PyInstaller.utils.hooks import collect_submodules
+hiddenimports = collect_submodules('sklearn')
+#==============================================================================================================================================
