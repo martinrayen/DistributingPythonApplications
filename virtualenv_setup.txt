@@ -1,0 +1,125 @@
+=========================================================================================================================================================
+Virtual Environment : Setup and working
+######## IMPORTANT : Launch command prompt in Admin mode. #####################
+=========================================================================================================================================================
+1. Install virtualenv package. 
+	==> pip install virtualenv
+	==> pip install —user virtualenv==16.1 (#install this version)
+2. Create a folder for setting-up virtual environment.
+	==> mkdir C:\Users\HP\DevEnv\Projects\VirtualEnvironment
+3. Create a virtual environment.
+	==> C:\> cd \Users\HP\DevEnv\Projects\VirtualEnvironment\projects\vendorranking\train<EnterKey>
+	==> C:\Users\HP\DevEnv\Projects\VirtualEnvironment\projects\vendorranking\train>virtualenv Test
+4. Activate the virtual environment.
+	==> C:\Users\HP\DevEnv\Projects\VirtualEnvironment\projects\vendorranking\train>"C:\Users\HP\DevEnv\Projects\VirtualEnvironment\projects              \vendorranking\train\Scripts\activate.bat"
+5. Install the relevant modules required.
+	==> (Test) C:\Users\HP\DevEnv\Projects\VirtualEnvironment\projects\vendorranking\train>
+		pip install numpy
+		pip install pandas
+		pip install wxpython
+		pip install sklearn
+		pip install seaborn
+		pip install matplotlib
+		pip install xlrd
+		pip install tornado
+		pip install pywin32
+		pip install pypiwin32
+		pip install cython
+		pip install pyinstaller
+6. The application code file is training.py
+7. Run pyinstaller with the training.py file
+	==> (Test) C:\Users\HP\DevEnv\Projects\VirtualEnvironment\projects\vendorranking\train>pyinstaller training.py
+8. This creates training.spec file.
+9. Edit training.spec file as update as follows:
+################ -*- mode: python ; coding: utf-8 -*- #################################################################################
+	block_cipher = None
+
+	a = Analysis(['training.py','classMLModelingPipeline.py'],
+        	     	pathex=['C:\\Users\\HP\\DevEnv\\Projects\\VirtualEnvironment\\Projects\\VendorRanking\\train'],
+             		binaries=[],
+             		datas=[],
+             		hiddenimports= ['sklearn.neighbors.typedefs','sklearn.utils.sparsetools._graph_validation',
+					'sklearn.utils.sparsetools._graph_tools',
+					'sklearn.utils._cython_blas','sklearn.neighbors.quad_tree','sklearn.tree._utils'],
+             		hookspath=[],
+             		runtime_hooks=[],
+             		excludes=[],
+             		win_no_prefer_redirects=False,
+             		win_private_assemblies=False,
+             		cipher=block_cipher,
+             		noarchive=False)
+	pyz = PYZ(a.pure, a.zipped_data,cipher=block_cipher)
+
+	exe = EXE(pyz, a.scripts,[('W ignore', None, 'OPTION')],exclude_binaries=True,name='training',debug=False,
+          	  bootloader_ignore_signals=False,strip=False,upx=True,console=True )
+
+	coll = COLLECT(exe,a.binaries,a.zipfiles,a.datas,strip=False,upx=True,upx_exclude=[],name='training')
+#######################################################################################################################################
+10. Modify hooks file for pyinstaller.
+    Path to locate the hooks file : C:\Users\JM\DevEnv\Projects\VirtualEnv\Projects\VRS\train\Lib\site-packages\PyInstaller\hooks
+    ======================================================================================================================
+    (a) Modify hooks-scipy.py
+    ======================================================================================================================
+	# -----------------------------------------------------------------------------
+	# Copyright (c) 2013-2019, PyInstaller Development Team.
+	#
+	# Distributed under the terms of the GNU General Public License with exception
+	# for distributing bootloader.
+	#
+	# The full license is in the file COPYING.txt, distributed with this software.
+	# -----------------------------------------------------------------------------
+
+	import os
+	import glob
+	from PyInstaller.utils.hooks import get_module_file_attribute
+	from PyInstaller.compat import is_win
+
+	binaries = []
+
+	# package the DLL bundle that official scipy wheels for Windows ship
+	if is_win:
+    		dll_glob = os.path.join(os.path.dirname(get_module_file_attribute('scipy')), 'extra-dll', "*.dll")
+    	if glob.glob(dll_glob):
+        	binaries.append((dll_glob, "."))
+
+	# collect library-wide utility extension modules
+	hiddenimports = ['scipy._lib.%s' % m for m in ['messagestream', "_ccallback_c", "_fpumode"]]
+    ======================================================================================================================
+    ======================================================================================================================
+    (b) Modify hooks-sklearn.py
+    ======================================================================================================================
+	from PyInstaller.utils.hooks import collect_submodules
+	#from hookutils import collect_submodules
+	hiddenimports = collect_submodules('sklearn')
+    ======================================================================================================================
+    ======================================================================================================================
+    (c) Modify hook-sklearn.metrics.cluster.py
+    ======================================================================================================================
+	#-----------------------------------------------------------------------------
+	# Copyright (c) 2014-2019, PyInstaller Development Team.
+	#
+	# Distributed under the terms of the GNU General Public License with exception
+	# for distributing bootloader.
+	#
+	# The full license is in the file COPYING.txt, distributed with this software.
+	#-----------------------------------------------------------------------------
+
+	# Tested on Windows 7 64bit with scikit-learn 0.17 and Python 2.7
+	hiddenimports = ['sklearn.utils.sparsetools._graph_validation',
+                 	'sklearn.utils.sparsetools._graph_tools',
+                 	'sklearn.utils.lgamma',
+                 	'sklearn.utils.weight_vector']
+    ======================================================================================================================
+
+11. Run pyinstaller with the training.spec file as parameter.
+	==> (Test) C:\Users\HP\DevEnv\Projects\VirtualEnvironment\projects\vendorranking\train>pyinstaller training.spec
+
+12. The distribution build will be created in the folder :
+    C:\Users\HP\DevEnv\Projects\VirtualEnvironment\Projects\VendorRanking\train\dist\training
+
+13. Place the application configuration AppConfig.txt under this folder. Since its contains the executable file. 
+    i,e : training.exe 
+
+14. Deactivate the virtual environment.
+	==> (Test) C:\Users\HP\DevEnv\Projects\VirtualEnvironment\projects\vendorranking\train>deactivate
+	==> C:\Users\HP\DevEnv\Projects\VirtualEnvironment\projects\vendorranking\train>
